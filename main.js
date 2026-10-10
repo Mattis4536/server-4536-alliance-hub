@@ -17,7 +17,7 @@ const DEMO_MODE = false;
 // =========================================
 
 const state = {
-  loggedIn: false,
+  loggedIn: false, 
   managementUnlocked: false,
   currentPage: "overview",
 
@@ -68,12 +68,6 @@ function escapeHTML(value) {
 // =========================================
 
 function login(username, password) {
-  if (!DEMO_MODE) {
-    showMessage(
-      "Demo-Login ist deaktiviert. Bitte verbinde ein sicheres Backend."
-    );
-    return false;
-  }
 
   if (
     username.trim() === MEMBER_USERNAME &&
