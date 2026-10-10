@@ -1,0 +1,1104 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="style.css">
+<script src="script.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080d16">
+<title>TOP WAR | SERVER 4536</title>
+<style>
+:root {
+  --bg: #080d16;
+  --panel: #101a29;
+  --panel2: #142236;
+  --cyan: #42dcff;
+  --blue: #2588ff;
+  --red: #ff5368;
+  --text: #edf6ff;
+  --muted: #91a5bd;
+  --border: rgba(92, 181, 255, .19);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at 50% 0%, #16304a 0%, transparent 48%),
+    linear-gradient(135deg, #080d16, #0b1220 55%, #080d16);
+  color: var(--text);
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  background-image:
+    linear-gradient(rgba(66,220,255,.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(66,220,255,.13) 1px, transparent 1px);
+  background-size: 42px 42px;
+}
+button, input, textarea, select { font: inherit; }
+button { cursor: pointer; }
+button:focus-visible, input:focus-visible, textarea:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+header {
+  height: 76px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: rgba(8,13,22,.88);
+  position: relative;
+  z-index: 2;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+.brand-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  color: var(--cyan);
+  border: 1px solid var(--cyan);
+  clip-path: polygon(20% 0,80% 0,100% 25%,100% 75%,80% 100%,20% 100%,0 75%,0 25%);
+  font-size: 20px;
+}
+.brand small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 5px;
+  letter-spacing: 3px;
+}
+.status {
+  color: #63f6bd;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+.status::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  background: #63f6bd;
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 12px #63f6bd;
+}
+main, .dashboard {
+  position: relative;
+  z-index: 1;
+}
+.hero {
+  min-height: 690px;
+  padding: 105px 24px 90px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.hero-inner { max-width: 850px; animation: enter .8s ease both; }
+.eyebrow {
+  color: var(--cyan);
+  font-size: 11px;
+  letter-spacing: 5px;
+  font-weight: 800;
+}
+h1 {
+  font-size: clamp(38px, 7vw, 76px);
+  line-height: 1.05;
+  margin: 24px 0;
+  font-weight: 950;
+  letter-spacing: -2px;
+}
+h1 span {
+  color: var(--cyan);
+  text-shadow: 0 0 35px rgba(66,220,255,.27);
+}
+.subtitle {
+  color: #9bb3cb;
+  letter-spacing: 6px;
+  font-size: clamp(11px, 2vw, 15px);
+  font-weight: 800;
+}
+.description {
+  color: #b1c1d3;
+  max-width: 620px;
+  margin: 25px auto 35px;
+  line-height: 1.9;
+  font-size: 15px;
+}
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.btn {
+  border: 1px solid var(--border);
+  padding: 15px 25px;
+  background: #132238;
+  color: var(--text);
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: 1px;
+  transition: .25s;
+  text-decoration: none;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 9px;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+  box-shadow: 0 8px 30px #2588ff20;
+}
+.btn-primary {
+  background: linear-gradient(110deg, #1687f8, #35d5fa);
+  color: #06101c;
+  border: 0;
+}
+.btn-danger { border-color: #ff536866; color: #ff8592; }
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  max-width: 680px;
+  margin: 70px auto 0;
+  border: 1px solid var(--border);
+  background: #0c1421a8;
+}
+.metric { padding: 23px 10px; }
+.metric + .metric { border-left: 1px solid var(--border); }
+.metric strong {
+  display: block;
+  color: var(--cyan);
+  font-size: 23px;
+}
+.metric small {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 2px;
+  margin-top: 8px;
+}
+footer {
+  position: relative;
+  z-index: 1;
+  border-top: 1px solid var(--border);
+  padding: 24px;
+  color: #71859c;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.78);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+.modal.open { display: flex; animation: fade .2s ease; }
+.modal-box {
+  width: 100%;
+  max-width: 420px;
+  padding: 34px;
+  background: #0e1928;
+  border: 1px solid #42dcff60;
+  box-shadow: 0 0 70px #1687f820;
+  animation: enter .3s ease;
+}
+.modal-box h2 { margin: 15px 0 8px; }
+.modal-box p { color: var(--muted); font-size: 13px; line-height: 1.7; }
+.field { margin: 18px 0; }
+.field label {
+  display: block;
+  color: #9db2c9;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 9px;
+}
+.field input, .field textarea, .field select {
+  width: 100%;
+  padding: 13px;
+  color: white;
+  background: #080f1a;
+  border: 1px solid var(--border);
+  outline: none;
+  border-radius: 2px;
+}
+.field input:focus, .field textarea:focus { border-color: var(--cyan); }
+.modal-box .btn { width: 100%; margin-top: 8px; }
+.close {
+  float: right;
+  color: var(--muted);
+  background: none;
+  border: 0;
+  font-size: 23px;
+}
+.error { color: #ff7587 !important; min-height: 18px; }
+.dashboard { display: none; min-height: calc(100vh - 130px); }
+.dashboard.active { display: block; }
+.dash-header {
+  padding: 35px 6% 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.dash-header h2 { margin: 0 0 8px; font-size: 29px; }
+.dash-header p { color: var(--muted); font-size: 13px; margin: 0; }
+.nav {
+  display: flex;
+  gap: 7px;
+  padding: 0 6% 20px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+}
+.nav button {
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 12px 15px;
+  color: #8ea4bb;
+  font-size: 11px;
+  font-weight: 800;
+}
+.nav button.active, .nav button:hover {
+  color: var(--cyan);
+  border-color: var(--border);
+  background: #142236;
+}
+.content { padding: 30px 6% 55px; }
+.section { display: none; }
+.section.active { display: block; animation: enter .35s ease; }
+.section-title {
+  font-size: 19px;
+  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-title::before {
+  content: "";
+  width: 4px;
+  height: 22px;
+  background: var(--cyan);
+  box-shadow: 0 0 12px var(--cyan);
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 18px;
+}
+.card {
+  background: linear-gradient(145deg,#121f30,#0c1421);
+  border: 1px solid var(--border);
+  padding: 23px;
+  min-width: 0;
+  transition: .25s;
+}
+.card:hover { border-color: #42dcff65; }
+.card h3 { margin: 0 0 12px; font-size: 15px; }
+.card p { color: #9db0c6; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere; }
+.card small { color: var(--cyan); font-size: 10px; letter-spacing: 1px; }
+.big-number { font-size: 35px; font-weight: 900; color: var(--cyan); }
+.item {
+  border-bottom: 1px solid var(--border);
+  padding: 15px 0;
+}
+.item:last-child { border-bottom: 0; }
+.item h4 { margin: 7px 0; }
+.item p { margin: 5px 0; }
+.muted { color: var(--muted); font-size: 12px; }
+.team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.team-alpha { border-top: 2px solid var(--cyan); }
+.team-bravo { border-top: 2px solid var(--red); }
+.team-alpha .big-number { color: var(--cyan); }
+.team-bravo .big-number { color: #ff8490; }
+.team-input { display: flex; gap: 8px; margin: 18px 0; }
+.team-input input {
+  width: 100%; min-width: 0; padding: 12px;
+  background: #080f1a; border: 1px solid var(--border); color: white;
+}
+.player {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 11px;
+  background: #142236;
+  margin-top: 8px;
+  font-size: 13px;
+  animation: enter .2s ease;
+}
+.player-actions { display: flex; gap: 5px; }
+.mini-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--cyan);
+  padding: 6px 8px;
+  font-size: 11px;
+}
+.mini-btn:hover { border-color: var(--cyan); }
+.management-status {
+  padding: 12px;
+  border: 1px solid #ff536855;
+  color: #ff9ba5;
+  font-size: 11px;
+  margin-bottom: 20px;
+}
+.management-status.unlocked {
+  border-color: #63f6bd55;
+  color: #63f6bd;
+}
+.management-tools { display: none; }
+.management-tools.visible { display: block; }
+.editor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 22px;
+}
+.editor .full { grid-column: 1/-1; }
+.toast {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 30;
+  background: #132638;
+  border: 1px solid var(--cyan);
+  padding: 15px 20px;
+  box-shadow: 0 0 30px #0008;
+  display: none;
+  max-width: calc(100% - 40px);
+  font-size: 13px;
+}
+.toast.show { display: block; animation: enter .25s ease; }
+@keyframes enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@media(max-width:700px) {
+  header { padding: 0 5%; height: 68px; }
+  .brand { font-size: 12px; }
+  .brand-icon { width: 36px; height: 36px; }
+  .status { font-size: 9px; letter-spacing: 0; }
+  .hero { min-height: 650px; padding-top: 65px; }
+  .subtitle { letter-spacing: 3px; }
+  .metrics { margin-top: 50px; }
+  .metric strong { font-size: 19px; }
+  .metric small { letter-spacing: 1px; font-size: 8px; }
+  .cards, .team-grid, .editor { grid-template-columns: 1fr; }
+  .editor .full { grid-column: auto; }
+  .dash-header { padding: 28px 5% 20px; }
+  .content { padding: 25px 5% 40px; }
+  .nav { padding-left: 5%; padding-right: 5%; }
+  .modal-box { padding: 25px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-icon">✦</div>
+    <div>TOP WAR <small>SERVER 4536</small></div>
+  </div>
+  <div class="status">SYSTEM ONLINE</div>
+</header>
+
+<main>
+  <div id="landing" class="hero">
+    <div class="hero-inner">
+      <div class="eyebrow">◈ ALLIANCE COMMAND CENTER ◈</div>
+      <h1>TOP WAR <span>| SERVER 4536</span></h1>
+      <div class="subtitle">STRATEGY. UNITY. DOMINANCE.</div>
+      <p class="description">
+        Welcome to the command center for our Top War alliance on
+        Server 4536. Stay informed, prepare for upcoming operations,
+        and coordinate with your fellow commanders.
+      </p>
+      <div class="actions">
+        <a class="btn btn-primary" href="https://discord.gg/zHJhUsp8n8"
+           target="_blank" rel="noopener noreferrer">↗ JOIN OUR DISCORD</a>
+        <button class="btn" onclick="openModal('loginModal')">⌑ ALLIANCE LOGIN</button>
+      </div>
+      <div class="metrics">
+        <div class="metric"><strong>4536</strong><small>SERVER</small></div>
+        <div class="metric"><strong>ONE</strong><small>ALLIANCE</small></div>
+        <div class="metric"><strong>∞</strong><small>AMBITION</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="dashboard" class="dashboard">
+    <div class="dash-header">
+      <div>
+        <div class="eyebrow">◈ SECURE ALLIANCE NETWORK</div>
+        <h2>Command Dashboard</h2>
+        <p>Welcome, Commander. Server 4536 is standing by.</p>
+      </div>
+      <button class="btn btn-danger" onclick="logout()">↪ LOGOUT</button>
+    </div>
+
+    <nav class="nav" aria-label="Dashboard navigation">
+      <button class="active" data-section="overview">⌂ OVERVIEW</button>
+      <button data-section="board">▤ ALLIANCE BOARD</button>
+      <button data-section="events">◷ EVENTS</button>
+      <button data-section="teams">♟ TEAM PLANNER</button>
+      <button data-section="management">⚙ ALLIANCE MANAGEMENT 🔒</button>
+    </nav>
+
+    <div class="content">
+      <section class="section active" id="overview">
+        <h3 class="section-title">Operations Overview</h3>
+        <div class="cards">
+          <div class="card">
+            <small>ALLIANCE INTELLIGENCE</small>
+            <h3>Latest Announcements</h3>
+            <div id="overviewAnnouncements" class="muted">Loading announcements...</div>
+          </div>
+          <div class="card">
+            <small>MISSION CONTROL</small>
+            <h3>Upcoming Events</h3>
+            <div id="overviewEvents" class="muted">Loading events...</div>
+          </div>
+          <div class="card">
+            <small>TEAM ALPHA</small>
+            <div class="big-number" id="alphaCount">0</div>
+            <p>Players assigned to Alpha</p>
+          </div>
+          <div class="card">
+            <small>TEAM BRAVO</small>
+            <div class="big-number" id="bravoCount">0</div>
+            <p>Players assigned to Bravo</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="board">
+        <h3 class="section-title">Alliance Board</h3>
+        <div id="announcementList" class="cards"></div>
+      </section>
+
+      <section class="section" id="events">
+        <h3 class="section-title">Mission Schedule</h3>
+        <div class="actions" style="justify-content:flex-start;margin-bottom:20px">
+          <button class="btn filter active" data-filter="all">ALL EVENTS</button>
+          <button class="btn filter" data-filter="upcoming">UPCOMING</button>
+          <button class="btn filter" data-filter="past">PAST</button>
+        </div>
+        <div id="eventList" class="cards"></div>
+      </section>
+
+      <section class="section" id="teams">
+        <h3 class="section-title">Team Planner</h3>
+        <p class="muted">Organize alliance members into operational teams.</p>
+        <div class="team-grid">
+          <div class="card team-alpha">
+            <small>◈ OPERATIONAL UNIT 01</small>
+            <h3>Team Alpha</h3>
+            <div class="big-number" id="alphaCount2">0</div>
+            <div class="team-input">
+              <input id="alphaInput" placeholder="Enter player name" maxlength="40">
+              <button class="btn btn-primary" onclick="addPlayer('alpha')">ADD</button>
+            </div>
+            <div id="alphaPlayers"></div>
+          </div>
+          <div class="card team-bravo">
+            <small>◈ OPERATIONAL UNIT 02</small>
+            <h3>Team Bravo</h3>
+            <div class="big-number" id="bravoCount2">0</div>
+            <div class="team-input">
+              <input id="bravoInput" placeholder="Enter player name" maxlength="40">
+              <button class="btn btn-primary" onclick="addPlayer('bravo')">ADD</button>
+            </div>
+            <div id="bravoPlayers"></div>
+          </div>
+        </div>
+        <p class="muted" id="lastUpdated">Last Updated: Not available</p>
+      </section>
+
+      <section class="section" id="management">
+        <h3 class="section-title">Alliance Management</h3>
+        <div id="managementStatus" class="management-status">
+          🔒 MANAGEMENT LOCKED — Verification required.
+        </div>
+        <div id="managementLocked">
+          <div class="card" style="max-width:480px">
+            <h3>Restricted Command Access</h3>
+            <p>Management authorization is required to edit announcements and events.</p>
+            <button class="btn btn-primary" onclick="openModal('managementModal')">
+              UNLOCK MANAGEMENT
+            </button>
+          </div>
+        </div>
+        <div id="managementTools" class="management-tools">
+          <div class="card">
+            <h3>Create Announcement</h3>
+            <div class="editor">
+              <div class="field">
+                <label for="announcementTitle">TITLE</label>
+                <input id="announcementTitle" maxlength="120" placeholder="Announcement title">
+              </div>
+              <div class="field">
+                <label for="announcementAuthor">AUTHOR</label>
+                <input id="announcementAuthor" maxlength="60" placeholder="Commander">
+              </div>
+              <div class="field full">
+                <label for="announcementMessage">MESSAGE</label>
+                <textarea id="announcementMessage" rows="4" maxlength="5000" placeholder="Enter your message"></textarea>
+              </div>
+              <div class="field full">
+                <label for="announcementImage">IMAGE URL (OPTIONAL)</label>
+                <input id="announcementImage" type="url" placeholder="https://example.com/image.jpg">
+              </div>
+              <div class="field full">
+                <label for="announcementLink">EXTERNAL LINK (OPTIONAL)</label>
+                <input id="announcementLink" type="url" placeholder="https://example.com">
+              </div>
+              <div class="full">
+                <button class="btn btn-primary" onclick="createAnnouncement()">PUBLISH ANNOUNCEMENT</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:20px">
+            <h3>Create Event</h3>
+            <div class="editor">
+              <div class="field">
+                <label for="eventTitle">EVENT TITLE</label>
+                <input id="eventTitle" maxlength="120" placeholder="Operation name">
+              </div>
+              <div class="field">
+                <label for="eventCategory">CATEGORY</label>
+                <select id="eventCategory">
+                  <option>War</option>
+                  <option>Alliance Event</option>
+                  <option>Preparation</option>
+                  <option>Other</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="eventDate">DATE AND TIME</label>
+                <input id="eventDate" type="datetime-local">
+              </div>
+              <div class="field">
+                <label for="eventEnd">END TIME (OPTIONAL)</label>
+                <input id="eventEnd" type="datetime-local">
+              </div>
+              <div class="field full">
+                <label for="eventDescription">DESCRIPTION</label>
+                <textarea id="eventDescription" rows="3" maxlength="5000" placeholder="Mission briefing"></textarea>
+              </div>
+              <div class="field full">
+                <label for="eventImage">IMAGE URL (OPTIONAL)</label>
+                <input id="eventImage" type="url" placeholder="https://example.com/image.jpg">
+              </div>
+              <div class="field full">
+                <label for="eventLink">EXTERNAL LINK (OPTIONAL)</label>
+                <input id="eventLink" type="url" placeholder="https://example.com">
+              </div>
+              <div class="full">
+                <button class="btn btn-primary" onclick="createEvent()">SCHEDULE EVENT</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer>TOP WAR: BATTLE GAME · SERVER 4536 · ALLIANCE COMMAND CENTER</footer>
+
+<div class="modal" id="loginModal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('loginModal')" aria-label="Close">×</button>
+    <div class="eyebrow">◈ IDENTITY VERIFICATION</div>
+    <h2 id="loginTitle">Alliance Login</h2>
+    <p>Authenticate to access restricted alliance intelligence.</p>
+    <form id="loginForm">
+      <div class="field">
+        <label for="username">USERNAME</label>
+        <input id="username" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label for="password">PASSWORD</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+      </div>
+      <p id="loginError" class="error" role="alert"></p>
+      <button class="btn btn-primary" type="submit">AUTHENTICATE →</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal" id="managementModal" role="dialog" aria-modal="true" aria-labelledby="managementTitle">
+  <div class="modal-box">
+    <button class="close" onclick="closeModal('managementModal')" aria-label="Close">×</button>
+    <div class="eyebrow">◈ LEVEL 02 AUTHORIZATION</div>
+    <h2 id="managementTitle">Management Access</h2>
+    <p>Enter the management credentials to unlock administrative tools.</p>
+    <form id="managementForm">
+      <div class="field">
+        <label for="managementPassword">MANAGEMENT PASSWORD</label>
+        <input id="managementPassword" type="password" autocomplete="current-password" required>
+      </div>
+      <p id="managementError" class="error" role="alert"></p>
+      <button class="btn btn-primary" type="submit">UNLOCK SYSTEM →</button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+
+
+
+const DEMO_MODE = true;
+const state = {
+  loggedIn: false,
+  management: false,
+  announcements: [{
+    id: 1,
+    title: "Welcome, Commanders",
+    message: "Welcome to the Server 4536 Alliance Hub. Check upcoming events and coordinate your team assignments.",
+    author: "Alliance Command",
+    created: new Date().toISOString(),
+    demo: true
+  }],
+  events: [{
+    id: 1,
+    title: "Alliance Coordination",
+    description: "Review team assignments and prepare for upcoming operations.",
+    category: "Alliance Event",
+    date: new Date(Date.now() + 86400000).toISOString(),
+    demo: true
+  }],
+  alpha: [],
+  bravo: [],
+  lastUpdated: null
+};
+
+const $ = id => document.getElementById(id);
+
+function openModal(id) {
+  $(id).classList.add("open");
+  const input = $(id).querySelector("input");
+  if (input) setTimeout(() => input.focus(), 100);
+}
+function closeModal(id) {
+  $(id).classList.remove("open");
+}
+function notify(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(notify.timer);
+  notify.timer = setTimeout(() => toast.classList.remove("show"), 3200);
+}
+function safeUrl(value) {
+  if (!value) return "";
+  try {
+    const url = new URL(value);
+    return ["https:", "http:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+function safeImage(value) {
+  const url = safeUrl(value);
+  return url ? url : "";
+}
+function escapeHtml(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;",
+    '"': "&quot;", "'": "&#39;"
+  })[char]);
+}
+function formatDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "Date unavailable"
+    : date.toLocaleString("en-GB", {
+        dateStyle: "medium",
+        timeStyle: "short",
+        timeZone: "UTC"
+      }) + " UTC";
+}
+function imageMarkup(value) {
+  const url = safeImage(value);
+  return url
+    ? `<img src="${escapeHtml(url)}" alt="" loading="lazy"
+         style="width:100%;max-height:220px;object-fit:cover;margin-top:12px"
+         referrerpolicy="no-referrer">`
+    : "";
+}
+function linkMarkup(value, label = "OPEN LINK") {
+  const url = safeUrl(value);
+  return url
+    ? `<p><a class="btn" href="${escapeHtml(url)}"
+         target="_blank" rel="noopener noreferrer">${escapeHtml(label)} ↗</a></p>`
+    : "";
+}
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  $("loginError").textContent = "";
+
+  if (!DEMO_MODE) {
+    $("loginError").textContent = "Connect the server authentication API first.";
+    return;
+  }
+
+  // Demonstration credentials only. Never use this approach in production.
+  if ($("username").value === "Server" && $("password").value === "TWC") {
+    state.loggedIn = true;
+    closeModal("loginModal");
+    $("landing").style.display = "none";
+    $("dashboard").classList.add("active");
+    $("password").value = "";
+    renderAll();
+    notify("Demo login successful.");
+  } else {
+    $("loginError").textContent = "Invalid username or password.";
+  }
+});
+
+$("managementForm").addEventListener("submit", event => {
+  event.preventDefault();
+  $("managementError").textContent = "";
+
+  if ($("managementPassword").value === "R4TWC") {
+    state.management = true;
+    $("managementPassword").value = "";
+    closeModal("managementModal");
+    updateManagementUI();
+    notify("Demo management access unlocked.");
+  } else {
+    $("managementError").textContent = "Incorrect management password.";
+  }
+});
+
+function logout() {
+  state.loggedIn = false;
+  state.management = false;
+  $("dashboard").classList.remove("active");
+  $("landing").style.display = "";
+  closeModal("loginModal");
+  closeModal("managementModal");
+  updateManagementUI();
+  notify("You have logged out.");
+}
+
+document.querySelectorAll(".nav button[data-section]").forEach(button => {
+  button.addEventListener("click", () => {
+    if (!state.loggedIn) return;
+
+    const section = button.dataset.section;
+    document.querySelectorAll(".nav button").forEach(item =>
+      item.classList.toggle("active", item === button)
+    );
+    document.querySelectorAll(".section").forEach(item =>
+      item.classList.toggle("active", item.id === section)
+    );
+  });
+});
+
+document.querySelectorAll(".filter").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".filter").forEach(item =>
+      item.classList.toggle("active", item === button)
+    );
+    renderEvents(button.dataset.filter);
+  });
+});
+
+function updateManagementUI() {
+  $("managementStatus").classList.toggle("unlocked", state.management);
+  $("managementStatus").textContent = state.management
+    ? "✓ DEMO MANAGEMENT UNLOCKED"
+    : "🔒 MANAGEMENT LOCKED — Verification required.";
+  $("managementLocked").style.display = state.management ? "none" : "block";
+  $("managementTools").classList.toggle("visible", state.management);
+}
+
+function renderAnnouncements() {
+  const html = state.announcements.map(item => `
+    <article class="card">
+      <small>${item.demo ? "DEMO CONTENT · " : ""}ANNOUNCEMENT</small>
+      <h3>${escapeHtml(item.title)}</h3>
+      ${imageMarkup(item.image)}
+      <p>${escapeHtml(item.message).replace(/\n/g, "<br>")}</p>
+      <p class="muted">By ${escapeHtml(item.author)} · ${formatDate(item.created)}</p>
+      ${linkMarkup(item.link, "MORE INFORMATION")}
+      ${state.management ? `
+        <button class="mini-btn" onclick="deleteAnnouncement(${item.id})">DELETE</button>
+      ` : ""}
+    </article>
+  `).join("");
+
+  $("announcementList").innerHTML = html ||
+    '<div class="card"><h3>No announcements yet</h3><p>New alliance announcements will appear here.</p></div>';
+
+  $("overviewAnnouncements").innerHTML = state.announcements.length
+    ? `${state.announcements.length} announcement(s) available.`
+    : "No announcements available.";
+}
+
+function renderEvents(filter = "all") {
+  const now = Date.now();
+  const filtered = state.events.filter(item => {
+    const date = new Date(item.date).getTime();
+    if (filter === "upcoming") return date >= now;
+    if (filter === "past") return date < now;
+    return true;
+  }).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  $("eventList").innerHTML = filtered.map(item => `
+    <article class="card">
+      <small>${item.demo ? "DEMO CONTENT · " : ""}${escapeHtml(item.category)}</small>
+      <h3>${escapeHtml(item.title)}</h3>
+      ${imageMarkup(item.image)}
+      <p>${escapeHtml(item.description || "No description provided.")}</p>
+      <p>◷ ${formatDate(item.date)}</p>
+      ${item.end ? `<p>END: ${formatDate(item.end)}</p>` : ""}
+      ${linkMarkup(item.link, "EVENT DETAILS")}
+      ${state.management ? `
+        <button class="mini-btn" onclick="deleteEvent(${item.id})">DELETE EVENT</button>
+      ` : ""}
+    </article>
+  `).join("") || `
+    <div class="card">
+      <h3>No events found</h3>
+      <p>There are no events in this category.</p>
+    </div>
+  `;
+
+  const upcoming = state.events.filter(item =>
+    new Date(item.date).getTime() >= now
+  );
+  $("overviewEvents").textContent = upcoming.length
+    ? `${upcoming.length} upcoming event(s). Next: ${upcoming.sort((a,b) => new Date(a.date)-new Date(b.date))[0].title}`
+    : "No upcoming events scheduled.";
+}
+
+function renderTeams() {
+  ["alpha", "bravo"].forEach(team => {
+    const players = state[team];
+    $(team + "Count").textContent = players.length;
+    $(team + "Count2").textContent = players.length;
+    $(team + "Players").innerHTML = players.map((name, index) => `
+      <div class="player">
+        <span>${escapeHtml(name)}</span>
+        <div class="player-actions">
+          <button class="mini-btn" aria-label="Move ${escapeHtml(name)}"
+            onclick="movePlayer('${team}',${index})">
+            ⇄ MOVE
+          </button>
+          <button class="mini-btn" aria-label="Remove ${escapeHtml(name)}"
+            onclick="removePlayer('${team}',${index})">
+            ×
+          </button>
+        </div>
+      </div>
+    `).join("") || '<p class="muted">No players assigned yet.</p>';
+  });
+
+  $("lastUpdated").textContent = "Last Updated: " +
+    (state.lastUpdated ? formatDate(state.lastUpdated) : "No changes yet");
+}
+
+function addPlayer(team) {
+  if (!state.loggedIn) return;
+  if (!state.management) {
+    notify("Management access is required to change team assignments.");
+    return;
+  }
+
+  const input = $(team + "Input");
+  const name = input.value.trim();
+  if (!name) {
+    notify("Enter a player name first.");
+    input.focus();
+    return;
+  }
+
+  const exists = [...state.alpha, ...state.bravo]
+    .some(player => player.toLowerCase() === name.toLowerCase());
+
+  if (exists) {
+    notify("This player is already assigned to a team.");
+    return;
+  }
+
+  state[team].push(name);
+  input.value = "";
+  state.lastUpdated = new Date().toISOString();
+  renderTeams();
+  notify("Player added in this demo session.");
+}
+
+function movePlayer(team, index) {
+  if (!state.management) {
+    notify("Management access is required.");
+    return;
+  }
+  const destination = team === "alpha" ? "bravo" : "alpha";
+  const player = state[team][index];
+  if (player === undefined) return;
+
+  state[team].splice(index, 1);
+  state[destination].push(player);
+  state.lastUpdated = new Date().toISOString();
+  renderTeams();
+  notify("Player moved to Team " + (destination === "alpha" ? "Alpha" : "Bravo") + ".");
+}
+
+function removePlayer(team, index) {
+  if (!state.management) {
+    notify("Management access is required.");
+    return;
+  }
+  if (!confirm("Remove this player from the team?")) return;
+  state[team].splice(index, 1);
+  state.lastUpdated = new Date().toISOString();
+  renderTeams();
+  notify("Player removed.");
+}
+
+function createAnnouncement() {
+  if (!state.management) return notify("Management access is required.");
+
+  const title = $("announcementTitle").value.trim();
+  const message = $("announcementMessage").value.trim();
+  const author = $("announcementAuthor").value.trim() || "Alliance Command";
+  const image = $("announcementImage").value.trim();
+  const link = $("announcementLink").value.trim();
+
+  if (!title || !message) return notify("Enter an announcement title and message.");
+  if (image && !safeImage(image)) return notify("Enter a valid HTTP or HTTPS image URL.");
+  if (link && !safeUrl(link)) return notify("Enter a valid HTTP or HTTPS link.");
+
+  state.announcements.unshift({
+    id: Date.now(), title, message, author, image, link,
+    created: new Date().toISOString()
+  });
+
+  ["announcementTitle", "announcementMessage", "announcementImage",
+   "announcementLink"].forEach(id => $(id).value = "");
+
+  renderAll();
+  notify("Announcement created in this demo session.");
+}
+
+function deleteAnnouncement(id) {
+  if (!state.management) return;
+  if (!confirm("Delete this announcement?")) return;
+  state.announcements = state.announcements.filter(item => item.id !== id);
+  renderAll();
+  notify("Announcement deleted in this demo session.");
+}
+
+function createEvent() {
+  if (!state.management) return notify("Management access is required.");
+
+  const title = $("eventTitle").value.trim();
+  const description = $("eventDescription").value.trim();
+  const dateValue = $("eventDate").value;
+  const endValue = $("eventEnd").value;
+  const image = $("eventImage").value.trim();
+  const link = $("eventLink").value.trim();
+
+  if (!title || !dateValue) return notify("Enter an event title and date.");
+
+  const date = new Date(dateValue);
+  const end = endValue ? new Date(endValue) : null;
+
+  if (Number.isNaN(date.getTime())) return notify("Enter a valid event date.");
+  if (end && (Number.isNaN(end.getTime()) || end < date)) {
+    return notify("The end time must be after the start time.");
+  }
+  if (image && !safeImage(image)) return notify("Enter a valid image URL.");
+  if (link && !safeUrl(link)) return notify("Enter a valid external link.");
+
+  state.events.push({
+    id: Date.now(),
+    title,
+    description,
+    category: $("eventCategory").value,
+    date: date.toISOString(),
+    end: end ? end.toISOString() : "",
+    image,
+    link
+  });
+
+  ["eventTitle", "eventDescription", "eventDate", "eventEnd",
+   "eventImage", "eventLink"].forEach(id => $(id).value = "");
+
+  renderAll();
+  notify("Event created in this demo session.");
+}
+
+function deleteEvent(id) {
+  if (!state.management) return;
+  if (!confirm("Delete this event?")) return;
+  state.events = state.events.filter(item => item.id !== id);
+  renderAll();
+  notify("Event deleted in this demo session.");
+}
+
+function renderAll() {
+  renderAnnouncements();
+  renderEvents();
+  renderTeams();
+  updateManagementUI();
+}
+
+document.querySelectorAll(".modal").forEach(modal => {
+  modal.addEventListener("click", event => {
+    if (event.target === modal) closeModal(modal.id);
+  });
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    document.querySelectorAll(".modal.open").forEach(modal =>
+      closeModal(modal.id)
+    );
+  }
+});
+
+renderAll();
+</script>
+</body>
+</html>
