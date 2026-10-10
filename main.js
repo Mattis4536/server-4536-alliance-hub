@@ -10,7 +10,7 @@ const MEMBER_PASSWORD = "TWC";
 const MANAGEMENT_PASSWORD = "R4TWC";
 
 // Demo-Modus
-const DEMO_MODE = true;
+const DEMO_MODE = false;
 
 // =========================================
 // APP-STATUS
@@ -457,7 +457,8 @@ function renderManagement() {
 // FORMULAR-EVENTS
 // =========================================
 
-document.addEventListener("submit", event => {
+
+document.addEventListener("submit", async event => {
   const form = event.target;
 
   if (!(form instanceof HTMLFormElement)) return;
@@ -465,8 +466,11 @@ document.addEventListener("submit", event => {
   if (form.id === "loginForm") {
     event.preventDefault();
 
-    const username = form.querySelector('[name="username"]')?.value || "";
-    const password = form.querySelector('[name="password"]')?.value || "";
+    const username =
+      form.querySelector('[name="username"]')?.value || "";
+
+    const password =
+      form.querySelector('[name="password"]')?.value || "";
 
     if (login(username, password)) {
       closeLoginModal();
@@ -477,18 +481,25 @@ document.addEventListener("submit", event => {
   if (form.id === "announcementForm") {
     event.preventDefault();
 
-    const title = form.querySelector('[name="title"]')?.value || "";
-    const text = form.querySelector('[name="text"]')?.value || "";
+    const title =
+      form.querySelector('[name="title"]')?.value || "";
 
-    addAnnouncement(title, text);
+    const text =
+      form.querySelector('[name="text"]')?.value || "";
+
+    await addAnnouncement(title, text);
     form.reset();
   }
 
   if (form.id === "eventForm") {
     event.preventDefault();
 
-    const title = form.querySelector('[name="title"]')?.value || "";
-    const date = form.querySelector('[name="date"]')?.value || "";
+    const title =
+      form.querySelector('[name="title"]')?.value || "";
+
+    const date =
+      form.querySelector('[name="date"]')?.value || "";
+
     const description =
       form.querySelector('[name="description"]')?.value || "";
 
@@ -499,14 +510,20 @@ document.addEventListener("submit", event => {
   if (form.id === "teamForm") {
     event.preventDefault();
 
-    const team = form.querySelector('[name="team"]')?.value || "";
-    const player = form.querySelector('[name="player"]')?.value || "";
-    const role = form.querySelector('[name="role"]')?.value || "Member";
+    const team =
+      form.querySelector('[name="team"]')?.value || "";
+
+    const player =
+      form.querySelector('[name="player"]')?.value || "";
+
+    const role =
+      form.querySelector('[name="role"]')?.value || "Member";
 
     addTeamMember(team, player, role);
     form.reset();
   }
 });
+
 
 // =========================================
 // BUTTONS UND NAVIGATION
@@ -569,3 +586,64 @@ document.addEventListener("DOMContentLoaded", () => {
 
   console.log("Server 4536 Alliance Hub initialized.");
 });
+
+
+async function addAnnouncement(title, text) {
+  if (!state.managementUnlocked) {
+    alert("Management-Zugang erforderlich.");
+    return;
+  }
+
+  title = title.trim();
+  text = text.trim();
+
+  if (!title || !text) {
+    alert("Bitte Titel und Nachricht eingeben.");
+    return;
+  }
+
+  // Ankündigung dauerhaft in Supabase speichern
+  const { data, error } = await supabaseClient
+    .from("announcements")
+    .insert([
+      {
+        title: title,
+        content: text
+      }
+    ])
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Fehler beim Speichern:", error);
+    alert("Ankündigung konnte nicht gespeichert werden: " + error.message);
+    return;
+  }
+
+  // Liste nach erfolgreichem Speichern aktualisieren
+  await loadAnnouncements();
+
+  alert("Ankündigung wurde erfolgreich gespeichert!");
+}
+
+async function loadAnnouncements() {
+  const { data, error } = await supabaseClient
+    .from("announcements")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Fehler beim Laden:", error);
+    alert("Ankündigungen konnten nicht geladen werden: " + error.message);
+    return;
+  }
+
+  state.announcements = data.map(item => ({
+    id: item.id,
+    title: item.title,
+    text: item.content,
+    date: new Date(item.created_at).toLocaleDateString()
+  }));
+
+  renderAnnouncements();
+}
