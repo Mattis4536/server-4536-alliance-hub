@@ -4,6 +4,8 @@
    Datei: script.js
    ========================================= */
 
+supabaseClient.from("announcements")
+
 // DEMO-ZUGANGSDATEN - NICHT FÜR PRODUKTIVE AUTHENTIFIZIERUNG
 const MEMBER_USERNAME = "Server";
 const MEMBER_PASSWORD = "TWC";
@@ -237,29 +239,7 @@ function closeLoginModal() {
 // ANKÜNDIGUNGEN
 // =========================================
 
-function addAnnouncement(title, text) {
-  if (!state.managementUnlocked) {
-    showMessage("Management access required.");
-    return;
-  }
 
-  title = title.trim();
-  text = text.trim();
-
-  if (!title || !text) {
-    showMessage("Please fill in both title and message.");
-    return;
-  }
-
-  state.announcements.unshift({
-    title,
-    text,
-    date: new Date().toLocaleDateString()
-  });
-
-  renderAnnouncements();
-  showMessage("Announcement added.");
-}
 
 function renderAnnouncements() {
   const container = $("#announcementsList");
@@ -571,15 +551,6 @@ document.addEventListener("click", event => {
 // INITIALISIERUNG
 // =========================================
 
-document.addEventListener("DOMContentLoaded", () => {
-  showLandingPage();
-
-  renderAnnouncements();
-  renderEvents();
-  renderTeams();
-
-  console.log("Server 4536 Alliance Hub initialized.");
-});
 
 
 async function addAnnouncement(title, text) {
@@ -641,3 +612,15 @@ async function loadAnnouncements() {
 
   renderAnnouncements();
 }
+
+
+document.addEventListener("DOMContentLoaded", async () => {
+  showLandingPage();
+
+  await loadAnnouncements();
+
+  renderEvents();
+  renderTeams();
+
+  console.log("Server 4536 Alliance Hub initialized.");
+});
